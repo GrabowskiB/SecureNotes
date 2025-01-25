@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Profil Użytkownika</h1>
+    {% if current_user.totp_secret %}
+        <form method="POST">
+            <p>TOTP jest włączone.</p>
+            <button type="submit" class="form-submit">Wyłącz TOTP</button>
+        </form>
+    {% else %}
+        <form method="POST">
+            <p>TOTP jest wyłączone.</p>
+            <button type="submit" class="form-submit">Włącz TOTP</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

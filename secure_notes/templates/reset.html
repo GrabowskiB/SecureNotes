@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Zresetuj hasło{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Zresetuj hasło</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.password.label(class='form-label') }}<br>
+            {{ form.password(class='form-input') }}<br>
+            {% for error in form.password.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.confirm_password.label(class='form-label') }}<br>
+            {{ form.confirm_password(class='form-input') }}<br>
+            {% for error in form.confirm_password.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

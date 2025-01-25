@@ -1,0 +1,250 @@
+:root {
+    --primary-color: #FF8C00;
+    --secondary-color: #FF4500;
+    --background-color: #121212;
+    --text-color: #e0e0e0;
+    --error-color: #e57373;
+    --success-color: #81c784;
+    --danger-color: #e53935;
+    --light-color: #424242;
+}
+
+/* General Reset */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Navigation Styles */
+nav {
+    background-color: #1c1c1c;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    margin: 0 15px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 8px 15px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Headings */
+h1, h2, h3 {
+    text-align: center;
+    margin: 20px 0;
+    color: var(--primary-color);
+}
+
+h1 {
+    font-size: 2.5em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.3em;
+}
+
+/* Forms */
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--light-color);
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    gap: 15px; /* Add gap between form elements */
+}
+
+form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-size: 16px;
+    width: calc(100% - 20px);
+    max-width: 380px;
+    background-color: #2c2c2c;
+    color: var(--text-color);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-checkbox {
+    margin-right: 10px;
+}
+
+.form-checkbox-label {
+    font-size: 14px;
+}
+
+.form-submit {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.form-submit:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Flash Messages */
+.flash {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.flash.success {
+    background-color: #2e7d32;
+    border: 1px solid #1b5e20;
+    color: var(--success-color);
+}
+
+.flash.danger {
+    background-color: #c62828;
+    border: 1px solid #b71c1c;
+    color: var(--danger-color);
+}
+
+/* Notes */
+.notes-container {
+    max-width: 800px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.note {
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.note .note-content {
+    flex: 1;
+    color: var(--text-color);
+}
+.note .note-content h1,
+.note .note-content h2,
+.note .note-content h3,
+.note .note-content h4,
+.note .note-content h5,
+.note .note-content h6 {
+    color: var(--text-color);
+    text-align: left;
+}
+.note .note-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.note .note-actions a {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 5px 10px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    background-color: #2c2c2c;
+}
+
+.note small {
+    color: var(--text-color); /* uses the CSS defined text color */
+}
+
+.note .note-actions a:hover {
+    background-color: #333;
+}
+
+
+/* QR Code */
+.qr-container {
+    text-align: center;
+    margin: 20px auto;
+}
+
+.qr-container img {
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
+.qr-container a {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.qr-container a:hover {
+    color: var(--secondary-color);
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+}

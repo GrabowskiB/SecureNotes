@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Logowanie{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Logowanie</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label(class='form-label') }}<br>
+            {{ form.username(class='form-input') }}<br>
+            {% for error in form.username.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.password.label(class='form-label') }}<br>
+            {{ form.password(class='form-input') }}<br>
+            {% for error in form.password.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.totp_code.label(class='form-label') }}<br>
+            {{ form.totp_code(class='form-input') }}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+        <div class="link-group">
+    <div class="link-item">
+        <p>Nie masz konta?</p>
+        <a href="{{ url_for('auth.register') }}" class="btn">Zarejestruj się</a>
+    </div>
+    <div class="link-item">
+        <p>Zapomniałeś hasła?</p>
+        <a href="{{ url_for('auth.forgot_password') }}" class="btn">Zresetuj hasło</a>
+    </div>
+    </div>
+    </form>
+
+</div>
+{% endblock %}

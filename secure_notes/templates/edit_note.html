@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Edycja Notatki{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Edycja Notatki</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.content.label(class='form-label') }}<br>
+            {{ form.content(class='form-input') }}<br>
+            {% for error in form.content.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="checkbox-group">
+            {{ form.is_encrypted(class='form-checkbox') }}
+            {{ form.is_encrypted.label(class='form-checkbox-label') }}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

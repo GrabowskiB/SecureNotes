@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=${SECRET_KEY}
+      - DATABASE_URL=${DATABASE_URL}
+      - MAIL_SERVER=${MAIL_SERVER}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_FROM=${MAIL_FROM}
+      - LOGIN_ATTEMPT_LIMIT=${LOGIN_ATTEMPT_LIMIT}
+      - LOGIN_DELAY=${LOGIN_DELAY}
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/nginx/certs
+    depends_on:
+      - flask_app

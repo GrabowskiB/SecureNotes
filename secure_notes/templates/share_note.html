@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Udostępnij notatkę{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Udostępnij notatkę "{{ note.title }}"</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.shared_with.label(class='form-label') }}<br>
+            {{ form.shared_with(class='form-input') }}<br>
+            {% for error in form.shared_with.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="checkbox-group">
+            {{ form.is_public(class='form-checkbox') }}
+            {{ form.is_public.label(class='form-checkbox-label') }}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

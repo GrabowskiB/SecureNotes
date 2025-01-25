@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Reset hasła{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Reset hasła</h1>
+    <p>Podaj email, aby zresetować hasło.</p>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label(class='form-label') }}<br>
+            {{ form.email(class='form-input') }}<br>
+            {% for error in form.email.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

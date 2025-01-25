@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Rejestracja{% endblock %}
+
+{% block content %}
+<div class="form-section">
+    <h1>Rejestracja</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label(class='form-label') }}<br>
+            {{ form.username(class='form-input') }}<br>
+            {% for error in form.username.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.email.label(class='form-label') }}<br>
+            {{ form.email(class='form-input') }}<br>
+            {% for error in form.email.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.password.label(class='form-label') }}<br>
+            {{ form.password(class='form-input') }}<br>
+            {% for error in form.password.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+            <small>Hasło musi zawierać co najmniej 8 znaków, 1 wielką literę, 1 małą literę, 1 cyfrę i 1 znak specjalny.</small>
+        </div>
+        <div>
+            {{ form.confirm_password.label(class='form-label') }}<br>
+            {{ form.confirm_password(class='form-input') }}<br>
+            {% for error in form.confirm_password.errors %}
+                <span class="error">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="checkbox-group">
+            {{ form.enable_totp(class='form-checkbox') }}
+            {{ form.enable_totp.label(class='form-checkbox-label') }}
+        </div>
+        <div>
+            {{ form.submit(class='form-submit') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

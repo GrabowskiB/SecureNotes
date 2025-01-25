@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}TOTP{% endblock %}
+
+{% block content %}
+<div class="qr-container">
+    <h1>Zeskanuj QR Code</h1>
+    <img src="{{ url_for('auth.static_files', filename=qr_code) }}" alt="QR Code">
+    <a href="{{ url_for('auth.login') }}" class="btn-link">Przejdź do logowania</a>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Notatki{% endblock %}
+
+{% block content %}
+<h1>Notatki</h1>
+<form method="POST" class="form-section">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.content.label(class='form-label') }}<br>
+        {{ form.content(class='form-input') }}<br>
+        {% for error in form.content.errors %}
+            <span class="error">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="checkbox-group">
+        {{ form.is_encrypted(class='form-checkbox') }}
+        {{ form.is_encrypted.label(class='form-checkbox-label') }}
+    </div>
+    <div>
+        {{ form.submit(class='form-submit') }}
+    </div>
+</form>
+
+<h2>Twoje notatki:</h2>
+<div class="notes-container">
+    {% for note in notes %}
+        <div class="note">
+            {% if note.is_encrypted %}
+                <span class="lock-icon">🔒</span>
+            {% endif %}
+            <div class="note-content">{{ note.content|safe }}</div>
+            {% if note.author %}
+                <small>Autor: {{ note.author.username }}</small>
+            {% endif %}
+            <small>Utworzono: {{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            {% if note.updated_at %}
+                <small>Zmodyfikowano: {{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            {% endif %}
+
+            <div class="note-signature-status">
+                {% if note.is_signature_valid is not none %}
+                    {% if note.is_signature_valid %}
+                        <span class="text-success">Podpis zweryfikowany</span>
+                    {% else %}
+                        <span class="text-danger">Podpis nieprawidłowy</span>
+                    {% endif %}
+                {% else %}
+                    <span class="text-warning">Brak podpisu</span>
+                {% endif %}
+            </div>
+
+            <div class="note-actions">
+                {% if note.user_id == current_user.id %}
+                    <a href="{{ url_for('notes.edit_note', note_id=note.id) }}">Edytuj</a>
+                    <a href="{{ url_for('notes.share_note', note_id=note.id) }}">Udostępnij</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Untitled Page{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block head_styles %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('main.index') }}" class="{% if request.endpoint == 'main.index' %}active{% endif %}">Notatki</a></li>
+            <li><a href="{{ url_for('notes.public_notes') }}" class="{% if request.endpoint == 'main.public_notes' %}active{% endif %}">Publiczne</a></li>
+            {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.profile') }}" class="{% if request.endpoint == 'auth.profile' %}active{% endif %}">Profil</a></li>
+                <li><a href="{{ url_for('auth.logout') }}">Wyloguj</a></li>
+            {% else %}
+                <li><a href="{{ url_for('auth.register', next=request.path) }}" class="{% if request.endpoint == 'auth.register' %}active{% endif %}">Rejestracja</a></li>
+                <li><a href="{{ url_for('auth.login', next=request.path) }}" class="{% if request.endpoint == 'auth.login' %}active{% endif %}">Logowanie</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Notes App</p>
+    </footer>
+</body>
+</html>
