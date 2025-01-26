@@ -7,7 +7,7 @@ main_bp = Blueprint('main', __name__)
 def index():
     if current_user.is_authenticated:
         return redirect(url_for('notes.notes'))
-    return redirect(url_for('auth.login'))
+    return render_template('index.html')
 
 @main_bp.route('/static/<path:filename>')
 def static_files(filename):

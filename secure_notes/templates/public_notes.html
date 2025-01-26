@@ -12,7 +12,9 @@
                 <small>Autor: {{ note.author.username }}</small>
             {% endif %}
             <small>Utworzono: {{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-            <small>Zmodyfikowano: {{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            {% if note.updated_at %}
+                <small>Zmodyfikowano: {{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            {% endif %}
         <div class="note-signature-status">
                 {% if note.is_signature_valid is not none %}
                     {% if note.is_signature_valid %}

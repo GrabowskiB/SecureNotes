@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from dotenv import load_dotenv
+from flask_wtf import CSRFProtect
 from sqlalchemy import func
 
 load_dotenv()
@@ -103,11 +104,13 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
 
+    csrf = CSRFProtect(app)
+
     app.config["CONTENT_SECURITY_POLICY"] = {
         "default-src": "'self'",
         "img-src": "*",
-        "script-src": ["'self'", "'unsafe-inline'"],
-        "style-src": ["'self'", "'unsafe-inline'"]
+        "script-src": ["'self'"],
+        "style-src": ["'self'"]
     }
     app.config['SERVER_NAME'] = "local.securenotes.app"
 
@@ -122,6 +125,6 @@ def create_app():
     app.register_blueprint(main.main_bp)
 
     with app.app_context():
-        db.create_all()  # Create the database tables
+        db.create_all()
 
     return app

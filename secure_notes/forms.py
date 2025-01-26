@@ -4,13 +4,17 @@ from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationE
 from email_validator import validate_email, EmailNotValidError
 import re
 
+class HoneypotField(StringField):
+    def validate(self, form, extra_validators=tuple()):
+        if self.data:
+            raise ValidationError("Honeypot field should be empty.")
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=80)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8),
-                                                     lambda form, field: validate_password_strength(field.data)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    honeypot = HoneypotField('Leave this empty')
     enable_totp = BooleanField('Enable TOTP')
     submit = SubmitField('Register')
 

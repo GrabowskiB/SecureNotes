@@ -26,15 +26,12 @@ LOGIN_ATTEMPT_LIMIT = int(os.getenv('LOGIN_ATTEMPT_LIMIT', 5))
 LOGIN_DELAY = int(os.getenv('LOGIN_DELAY', 1))
 SECRET_KEY = os.getenv('SECRET_KEY', 'your_default_secret_key')
 MAIL_SERVER = os.getenv('MAIL_SERVER')
-MAIL_PORT = int(os.getenv('MAIL_PORT', 587))
+MAIL_PORT = int(os.getenv('MAIL_PORT'))
 MAIL_USERNAME = os.getenv('MAIL_USERNAME')
 MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
 MAIL_FROM = os.getenv('MAIL_FROM')
-
-# Global encryption key for notes, must be the same as in notes.py
 GLOBAL_ENCRYPTION_KEY = os.getenv('GLOBAL_ENCRYPTION_KEY', '16bytesSecretKey').encode()
-IV = b'16bytesIV1234567'  # Initialization vector for AES
-
+IV = b'16bytesIV1234567'
 s = URLSafeTimedSerializer(SECRET_KEY)
 
 
@@ -79,8 +76,6 @@ def encrypt_key(private_key, password, salt):
     return private_pem.decode()
 
 
-# Decrypt the encrypted private key using password
-
 def decrypt_key(encrypted_key, password, key_salt):
     print(f"Decrypt Key Salt: {key_salt}")
     try:
@@ -94,12 +89,10 @@ def decrypt_key(encrypted_key, password, key_salt):
         )
         key = base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
-        # Ensure the encrypted_key is properly padded
         missing_padding = len(encrypted_key) % 4
         if missing_padding:
             encrypted_key += '=' * (4 - missing_padding)
 
-        # Decrypt the private key using the derived key
         private_key = serialization.load_pem_private_key(
             encrypted_key.encode(),
             password=key,
@@ -284,6 +277,11 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+
+        if form.honeypot.data:
+            flash("Wykryto podejrzaną aktywność. Formularz został odrzucony.", "danger")
+            return render_template('register.html', form=form)
+
         username = form.username.data
         email = form.email.data
         password = form.password.data
@@ -323,7 +321,7 @@ def show_qr(username):
     user = User.query.filter_by(username=username).first()
     if not user or not user.totp_secret:
         flash("Niepoprawny kod", "danger")
-        return redirect(url_for('auth.register'))
+        return redirect(url_for('auth.profile'))
 
     totp = pyotp.TOTP(user.totp_secret)
     uri = totp.provisioning_uri(name=user.username, issuer_name="SecureNotes")
@@ -350,9 +348,13 @@ def profile():
     if request.method == "POST":
         if current_user.totp_secret:
             current_user.totp_secret = None
+            flash("TOTP has been disabled.", "success")
         else:
             totp_secret = pyotp.random_base32()
             current_user.totp_secret = totp_secret
+            db.session.commit()  # Commit the change before redirecting
+            flash("TOTP has been enabled.", "success")
+            return redirect(url_for('auth.show_qr', username=current_user.username))
 
         db.session.commit()
         return redirect(url_for('auth.profile'))

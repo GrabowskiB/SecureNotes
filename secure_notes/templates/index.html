@@ -3,5 +3,9 @@
 {% block title %}Notatki{% endblock %}
 
 {% block content %}
+<div class="main-page">
     <h1>Witaj w Aplikacji Notatek</h1>
+    <p>To jest Twoje centrum zarządzania notatkami. Możesz dodawać, edytować i usuwać swoje notatki.</p>
+    <a href="{{ url_for('notes.notes') }}" class="btn">Przejdź do notatek</a>
+</div>
 {% endblock %}

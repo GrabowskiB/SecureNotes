@@ -5,16 +5,17 @@
 {% block content %}
 <div class="form-section">
     <h1>Profil Użytkownika</h1>
-    {% if current_user.totp_secret %}
-        <form method="POST">
+    <form method="POST">
+        <p>Nazwa użytkownika: {{ current_user.username }}</p>
+        <p>Email: {{ current_user.email }}</p>
+        {% if current_user.totp_secret %}
             <p>TOTP jest włączone.</p>
             <button type="submit" class="form-submit">Wyłącz TOTP</button>
-        </form>
-    {% else %}
-        <form method="POST">
+            <a href="{{ url_for('auth.show_qr', username=current_user.username) }}" class="form-submit">Pokaż kod QR</a>
+        {% else %}
             <p>TOTP jest wyłączone.</p>
             <button type="submit" class="form-submit">Włącz TOTP</button>
-        </form>
-    {% endif %}
+        {% endif %}
+    </form>
 </div>
 {% endblock %}

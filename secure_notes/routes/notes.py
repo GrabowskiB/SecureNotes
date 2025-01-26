@@ -25,7 +25,6 @@ kdf = PBKDF2HMAC(
     backend=default_backend()
 )
 
-# Global encryption key for notes
 SECRET_KEY = os.getenv('SECRET_KEY', 'your_default_secret_key')
 key = base64.urlsafe_b64encode(kdf.derive(SECRET_KEY.encode()))
 
@@ -46,7 +45,6 @@ allowed_attributes = {
     'div': ['class', 'style']
 }
 
-# Encryption functions
 def encrypt_content(content):
     cipher = Cipher(algorithms.AES(GLOBAL_ENCRYPTION_KEY), modes.CFB(IV), backend=default_backend())
     encryptor = cipher.encryptor()
@@ -59,7 +57,6 @@ def decrypt_content(encrypted_content):
     decrypted = decryptor.update(base64.b64decode(encrypted_content)) + decryptor.finalize()
     return decrypted.decode()
 
-# Sanitize HTML content
 def bleach_html(html):
     return bleach.clean(
         html,
@@ -101,7 +98,6 @@ def notes():
         content = form.content.data
         is_encrypted = form.is_encrypted.data
 
-        # Pobierz klucz prywatny z sesji
         private_key_pem = session.get('private_key')
         if not private_key_pem:
             flash("Błąd: brak klucza prywatnego w sesji.", "danger")
@@ -113,10 +109,8 @@ def notes():
             backend=default_backend()
         )
 
-        # Generowanie podpisu
         signature = base64.b64encode(sign_note_content(private_key, content)).decode()
 
-        # Encrypt the content if needed
         encrypted_content = encrypt_content(content) if is_encrypted else content
 
         now = datetime.utcnow()
@@ -133,29 +127,24 @@ def notes():
         flash('Notatka dodana z podpisem!', 'success')
         return redirect(url_for('notes.notes'))
 
-    # Pobierz notatki użytkownika, posortowane od najnowszych do najstarszych
     user_notes = Note.query.filter_by(user_id=current_user.id).order_by(Note.created_at.desc()).all()
     shared_notes = Note.query.join(SharedNote, Note.id == SharedNote.note_id).filter(SharedNote.user_id == current_user.id).order_by(Note.created_at.desc()).all()
     notes = user_notes + shared_notes
 
     for note in notes:
-        # Pobierz klucz publiczny autora
         author = User.query.get(note.user_id)
         if note.signature and author and author.public_key:
             public_key = serialization.load_pem_public_key(
                 author.public_key.encode(),
                 backend=default_backend()
             )
-            # Decrypt the content if needed
             try:
                 content_to_verify = decrypt_content(note.content) if note.is_encrypted else note.content
-                # Weryfikuj podpis
                 note.is_signature_valid = verify_note_signature(
                     public_key,
                     content_to_verify,
                     note.signature
                 )
-                # Decrypt the content for display
                 note.content = decrypt_content(note.content) if note.is_encrypted else note.content
             except Exception:
                 note.content = "Notatka nie może być wyświetlona ponieważ jest uszkodzona"
@@ -189,7 +178,6 @@ def edit_note(note_id):
         content = form.content.data
         is_encrypted = form.is_encrypted.data
 
-        # Pobierz klucz prywatny z sesji
         private_key_pem = session.get('private_key')
         if not private_key_pem:
             flash("Błąd: brak klucza prywatnego w sesji.", "danger")
@@ -201,7 +189,6 @@ def edit_note(note_id):
             backend=default_backend()
         )
 
-        # Generowanie nowego podpisu
         signature = base64.b64encode(sign_note_content(private_key, content)).decode()
 
         note.content = encrypt_content(content) if is_encrypted else content
@@ -219,23 +206,19 @@ def edit_note(note_id):
 def public_notes():
     notes = Note.query.filter_by(is_public=True).order_by(Note.created_at.desc()).all()
     for note in notes:
-        # Pobierz klucz publiczny autora
         author = User.query.get(note.user_id)
         if note.signature and author and author.public_key:
             public_key = serialization.load_pem_public_key(
                 author.public_key.encode(),
                 backend=default_backend()
             )
-            # Decrypt the content if needed
             try:
                 content_to_verify = decrypt_content(note.content) if note.is_encrypted else note.content
-                # Weryfikuj podpis
                 note.is_signature_valid = verify_note_signature(
                     public_key,
                     content_to_verify,
                     note.signature
                 )
-                # Decrypt the content for display
                 note.content = decrypt_content(note.content) if note.is_encrypted else note.content
             except Exception:
                 note.content = "Notatka nie może być wyświetlona ponieważ jest uszkodzona"

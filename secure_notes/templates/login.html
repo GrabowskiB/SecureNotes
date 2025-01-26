@@ -29,16 +29,15 @@
             {{ form.submit(class='form-submit') }}
         </div>
         <div class="link-group">
-    <div class="link-item">
-        <p>Nie masz konta?</p>
-        <a href="{{ url_for('auth.register') }}" class="btn">Zarejestruj się</a>
-    </div>
-    <div class="link-item">
-        <p>Zapomniałeś hasła?</p>
-        <a href="{{ url_for('auth.forgot_password') }}" class="btn">Zresetuj hasło</a>
-    </div>
-    </div>
+            <div class="link-item">
+                <p>Nie masz konta?</p>
+                <a href="{{ url_for('auth.register') }}" class="btn">Zarejestruj się</a>
+            </div>
+            <div class="link-item">
+                <p>Zapomniałeś hasła?</p>
+                <a href="{{ url_for('auth.forgot_password') }}" class="btn">Zresetuj hasło</a>
+            </div>
+        </div>
     </form>
-
 </div>
 {% endblock %}
