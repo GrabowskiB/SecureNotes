@@ -3,7 +3,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session, send_from_directory
 from flask_login import login_required, login_user, logout_user, current_user
-from ..forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm
+from ..forms import RegistrationForm, LoginForm, ForgotPasswordForm, ResetPasswordForm, EmptyForm
 from .. import db, User, FailedLoginAttempt
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
@@ -106,7 +106,7 @@ def decrypt_key(encrypted_key, password, key_salt):
 
 def send_reset_email(user):
     token = s.dumps(user.username, salt='reset-password')
-    reset_url = url_for('auth.reset_password', token=token, _external=True)
+    reset_url = f"http://127.0.0.1:5000/auth/reset/{token}"
 
     msg = EmailMessage()
     msg.set_content(f"Aby zresetować hasło kliknij w link:\n{reset_url}")
@@ -278,9 +278,9 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
 
-        if form.honeypot.data:
-            flash("Wykryto podejrzaną aktywność. Formularz został odrzucony.", "danger")
-            return render_template('register.html', form=form)
+        #if form.honeypot.data:
+        #    flash("Wykryto podejrzaną aktywność. Formularz został odrzucony.", "danger")
+        #    return render_template('register.html', form=form)
 
         username = form.username.data
         email = form.email.data
@@ -345,6 +345,7 @@ def static_files(filename):
 @auth_bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
+    form = EmptyForm()
     if request.method == "POST":
         if current_user.totp_secret:
             current_user.totp_secret = None
@@ -358,4 +359,4 @@ def profile():
 
         db.session.commit()
         return redirect(url_for('auth.profile'))
-    return render_template("profile.html")
+    return render_template("profile.html", form=form)

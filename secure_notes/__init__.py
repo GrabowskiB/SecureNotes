@@ -61,7 +61,7 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=func.now())
-    updated_at = db.Column(db.DateTime)  # Usuwamy onupdate=func.now()
+    updated_at = db.Column(db.DateTime)
     is_encrypted = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     shared_with = db.relationship('SharedNote', backref='note', lazy=True)

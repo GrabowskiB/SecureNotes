@@ -6,6 +6,7 @@
 <div class="form-section">
     <h1>Profil Użytkownika</h1>
     <form method="POST">
+        {{ form.hidden_tag() }}
         <p>Nazwa użytkownika: {{ current_user.username }}</p>
         <p>Email: {{ current_user.email }}</p>
         {% if current_user.totp_secret %}

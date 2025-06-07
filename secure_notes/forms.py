@@ -14,7 +14,6 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-    honeypot = HoneypotField('Leave this empty')
     enable_totp = BooleanField('Enable TOTP')
     submit = SubmitField('Register')
 
@@ -62,6 +61,9 @@ class ResetPasswordForm(FlaskForm):
                                                      lambda form, field: validate_password_strength(field.data)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Zmień hasło')
+
+class EmptyForm(FlaskForm):
+    pass
 
 
 def validate_password_strength(password):

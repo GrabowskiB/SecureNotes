@@ -35,14 +35,12 @@ IV = b'16bytesIV1234567'  # Initialization vector for AES
 
 allowed_tags = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em',
-    'a', 'img', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code', 'span', 'div'
+    'a', 'img', 'ul', 'ol', 'li', 'blockquote', 'pre', 'code'
 ]
 allowed_attributes = {
     '*': ['id', 'class', 'style'],
     'a': ['href', 'title', 'rel'],
     'img': ['src', 'alt', 'title', 'width', 'height'],
-    'span': ['class', 'style'],
-    'div': ['class', 'style']
 }
 
 def encrypt_content(content):
